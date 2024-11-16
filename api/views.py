@@ -6,8 +6,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django_filters import rest_framework as filters
 from rest_framework import viewsets, generics
 
-from .models import FillLevel, WeightLevel
-from .serializers import FillLevelSerializer, WeightLevelSerializer
+from .models import FillLevel, WeightLevel, FillPrediction, WeightPrediction
+from .serializers import FillLevelSerializer, WeightLevelSerializer, FillPredictionSerializer, WeightPredictionSerializer
 import json
 
 class FillLevelFilter(filters.FilterSet):
@@ -34,6 +34,14 @@ class WeightLevelView(generics.ListAPIView):
     serializer_class = WeightLevelSerializer
     filter_backends = [filters.DjangoFilterBackend]
     filterset_class = WeightLevelFilter
+
+class FillPredictionView(generics.ListAPIView):
+    queryset = FillPrediction.objects.all()
+    serializer_class = FillPredictionSerializer
+
+class WeightPredictionView(generics.ListAPIView):
+    queryset = WeightPrediction.objects.all()
+    serializer_class = WeightPredictionSerializer
 
 
 @csrf_exempt
