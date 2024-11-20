@@ -21,7 +21,6 @@ def load_historical_data():
         return None
 
 def predict_with_historical_context(current_data, historical_df, data_type, prediction_periods):
-
     if len(current_data) < 2:
         return
     
