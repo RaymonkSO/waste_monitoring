@@ -1,8 +1,9 @@
 import requests
 from api.models import FillLevel, WeightLevel, FillPrediction, WeightPrediction
-from .prediction import predict_levels
+from .arima import predict_bin_fill_today,  saveall, deleteall
+from datetime import datetime
 
-# https://api.thingspeak.com/channels/2669837/fields/2.json?api_key=MFOMLJJL1QN5UJ67&results=2
+# https://api.thingspeak.com/channels/2669837/fields/2.json?api_key=MFOMLJJL1QN5UJ67
 THINGSPEAK_API_URL = "https://api.thingspeak.com/channels/"
 CHANNEL_ID = 2669837
 
@@ -13,26 +14,25 @@ THINGSPEAK_WEIGHT_URL = f"{THINGSPEAK_API_URL}{CHANNEL_ID}/fields/1.json?api_key
 THINGSPEAK_FILL_URL = f"{THINGSPEAK_API_URL}{CHANNEL_ID}/fields/2.json?api_key={FILL_API_KEY}"
 
 
-
 def schedule_api_call_fill():
-
     models ={
     'FillLevel': FillLevel,
     'WeightLevel': WeightLevel,
     'FillPrediction': FillPrediction,
     'WeightPrediction': WeightPrediction
-    }
-    
+    }    
     response = requests.get(THINGSPEAK_FILL_URL)
     response.raise_for_status()
     data = response.json()['feeds']
 
     data_updated = False
 
+    # deleteall()
+
+    print(datetime.now())
     for entry in data:
         cur_level = entry['field2']
         cur_date = entry['created_at']
-        print(entry)
         try:
             existing_entry = FillLevel.objects.get(fill_date=cur_date)
             if float(existing_entry.fill_level) != float(cur_level):
@@ -49,14 +49,13 @@ def schedule_api_call_fill():
                     fill_date=cur_date
                 )
                 data_updated = True
-    
     if data_updated:
-        predict_levels(models, 'fill')
+        # saveall()
+        predict_bin_fill_today()
         print("Updated Predicted fill levels")
 
 
 def schedule_api_call_weight():
-
     models ={
     'FillLevel': FillLevel,
     'WeightLevel': WeightLevel,
