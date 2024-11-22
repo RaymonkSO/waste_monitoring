@@ -1,0 +1,9 @@
+{
+    "file_path": "fill_level_data2.xlsx",
+    "current_time": "2024-11-21T16:18:37.599352",
+    "arima_order": [
+        5,
+        1,
+        0
+    ]
+}
