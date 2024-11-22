@@ -67,8 +67,6 @@ def predict_bin_fill_today():
 
     second_last_hour_data = today_data[today_data['hour'] == current_time.hour - 1 - 8]['fill_level'].mean()
     second_last_hour_data = last_hour_data if not np.isnan(last_hour_data) else 0
-    print("last hour data: ", last_hour_data)
-    print("second last hour data: ", second_last_hour_data)
 
     today_slope = last_hour_data - second_last_hour_data if last_hour_data < second_last_hour_data else last_hour_data * 0.1
     for hour in range(start_hour, 23):
@@ -77,11 +75,11 @@ def predict_bin_fill_today():
 
         forecast = 0.5 * arima_forecast + 0.5 * last_hour_data + 0.5 * today_slope
 
-        print("Hour : " , hour)
-        print(last_hour_data)
-        print(arima_forecast)
-        print("baseline prediction (without slope): ", arima_forecast * 0.5 + last_hour_data * 0.5)
-        print(today_slope)
+        # print("Hour : " , hour)
+        # print(last_hour_data)
+        # print(arima_forecast)
+        # print("baseline prediction (without slope): ", arima_forecast * 0.5 + last_hour_data * 0.5)
+        # print(today_slope)
 
         # Append predictions
         current_day_time = current_time.replace(hour=hour, minute=0, second=0)
@@ -92,8 +90,6 @@ def predict_bin_fill_today():
         'timestamp': prediction_timestamps,
         'predicted_fill_level': predictions
     })
-
-    print("forecast_df ", forecast_df)
 
     save_prediction(forecast_df)
     print("Saved Predictions")

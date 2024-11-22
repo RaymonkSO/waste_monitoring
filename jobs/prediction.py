@@ -25,37 +25,31 @@ def predict_with_historical_context(current_data, historical_df, data_type, pred
     if len(current_data) < 2:
         return
     print("work 1 start")
-    # Get current weekday pattern
     cur_weekday = current_data['datetime'].dt.weekday[0]
     historical_pattern = historical_df[historical_df['weekday'] == cur_weekday]
     print("work 1 done")
     
-    # Prepare historical series for this weekday
     historical_series = pd.Series(
         historical_pattern[f'{data_type}_level'].values,
         index=historical_pattern['datetime']
     )
     
-    # Create and fit model using historical data
     model = ExponentialSmoothing(
         historical_series,
-        seasonal_periods=30,  # 30 intervals from 8am to 11pm
+        seasonal_periods=30, 
         trend='add',
         seasonal='add',
         initialization_method='estimated'
     ).fit(smoothing_level=0.6, smoothing_trend=0.3, smoothing_seasonal=0.3)
-    
-    # Generate forecast
+  
     print("work 2 start")
     forecast = model.forecast(prediction_periods)
     print("work 2 done")
     
-    # Adjust forecast with current data
     print("work 3 start")
     current_value = current_data[f'{data_type}_level'].values[-1]
     print("work 3 done")
 
-    # Adjust each prediction with current data
     for i, (idx, pred) in enumerate(forecast.items()):
         forecast[idx] = 0.5 * pred + 0.5 * current_value
         forecast[idx] = max(0, min(100, forecast[idx]))
@@ -139,6 +133,3 @@ def predict_levels(models, what_to_predict: str):
     #         print(f"Error in weight level prediction: {str(e)}")
                 
     
-# df = load_historical_data()
-# print("this is df")
-# print(df)

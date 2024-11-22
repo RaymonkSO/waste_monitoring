@@ -1,6 +1,6 @@
 import requests
 from api.models import FillLevel, WeightLevel, FillPrediction, WeightPrediction
-from .arima import predict_bin_fill_today,  saveall, deleteall
+from .arima import predict_bin_fill_today
 from datetime import datetime
 
 # https://api.thingspeak.com/channels/2669837/fields/2.json?api_key=MFOMLJJL1QN5UJ67
@@ -27,8 +27,6 @@ def schedule_api_call_fill():
 
     data_updated = False
 
-    # deleteall()
-
     print(datetime.now())
     for entry in data:
         cur_level = entry['field2']
@@ -50,7 +48,6 @@ def schedule_api_call_fill():
                 )
                 data_updated = True
     if data_updated:
-        # saveall()
         predict_bin_fill_today()
         print("Updated Predicted fill levels")
 
