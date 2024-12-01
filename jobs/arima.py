@@ -20,7 +20,7 @@ def forecast_hourly_fill_level(history, arima_order):
         saved_params = pickle.load(file)
 
     min_points = 119 # 17 hr x 7 days
-    recent_data = history[:min_points]
+    recent_data = history[min_points:]
     
     model = ARIMA(recent_data, order=saved_params['order'])
     model_fit = model.fit(start_params=saved_params['params'])

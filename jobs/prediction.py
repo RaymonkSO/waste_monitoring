@@ -107,7 +107,8 @@ def predict_levels(models, what_to_predict: str):
                     fill_level = max(0, min(100, value)),
                     fill_time = prediction_time
                 )
-
+                
+    # for prediction
     # if current_weight_data.exists() and what_to_predict = 'weight':
     #     try:
     #         current_weight_df = pd.DataFrame(list(current_weight_data.values()))

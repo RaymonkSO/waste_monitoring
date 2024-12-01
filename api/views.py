@@ -35,9 +35,17 @@ class WeightLevelView(generics.ListAPIView):
     filter_backends = [filters.DjangoFilterBackend]
     filterset_class = WeightLevelFilter
 
+class FillPredictionFilter(filters.FilterSet):
+    fill_date = filters.TimeFilter(field_name='fill_date')
+    class Meta:
+        model = FillPrediction
+        fields = ['fill_date']
+
 class FillPredictionView(generics.ListAPIView):
     queryset = FillPrediction.objects.all()
     serializer_class = FillPredictionSerializer
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_class = FillPredictionFilter
 
 class WeightPredictionView(generics.ListAPIView):
     queryset = WeightPrediction.objects.all()
